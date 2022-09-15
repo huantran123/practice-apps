@@ -17,6 +17,15 @@ module.exports.form = {
   alignItems:'flex-start'
 }
 
+module.exports.input = {
+  width: '300px',
+  height: '25px',
+  border: '1px solid #9ea6ad',
+  borderRadius: '5px',
+  paddingLeft: '5px',
+  overflow: 'hidden'
+}
+
 module.exports.buttonsFlex = {
   display: 'flex',
   justifyContent: 'flex-start',

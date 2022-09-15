@@ -5,13 +5,15 @@ const Styles = require('./styles.js')
 
 import NewWordForm from './components/NewWordForm.jsx'
 import Card from './components/Card.jsx'
+import Search from './components/Search.jsx'
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       words: [],
-      addExistedWord: false
+      addExistedWord: false,
+      searchList: [],   // Store the indexes of the words in the all words array that include the search term
     };
     this.url = 'http://localhost:2000/words'
   }
@@ -88,6 +90,32 @@ class App extends React.Component {
     })
   }
 
+  searchWord(term) {
+    var debounce = (cb, interval) => {
+      var timeOut;
+      return (...arg) => {
+        clearTimeout(timeOut);
+        timeOut = setTimeout(() => {cb.apply(this, arg);}, interval)
+      }
+    }
+
+    var getSearchList = (val) => {
+      var searchList = [];  // Store the indexes of the words in the all words array that include the search term
+      for (var i = 0; i < this.state.words.length; i++) {
+        if (this.state.words[i].word.includes(val)) {
+          searchList.push(i);
+        }
+      }
+      this.setState({searchList})
+    }
+
+    var search = debounce(() => {
+      getSearchList(term);
+    }, 500);
+
+    search();
+  }
+
   render() {
     return (
       <div className='container' style={Styles.container}>
@@ -97,18 +125,34 @@ class App extends React.Component {
             ? <div style={Styles.errorMess}>Word is already in the list!</div>
             : null
         }
-        <div className='cards' style={Styles.cardsFlex}>
-          {this.state.words.map((word) => (
-            <Card
-              key={word._id}
-              _id={word._id}
-              word={word.word}
-              definition={word.definition}
-              editWord={this.editWord.bind(this)}
-              deleteWord={this.deleteWord.bind(this)}
-            />
-          ))}
-        </div>
+        <Search searchWord={this.searchWord.bind(this)} />
+        {
+          this.state.searchList.length !== 0
+          ? <div className='cards' style={Styles.cardsFlex}>
+              {this.state.searchList.map((index) => (
+                <Card
+                  key={this.state.words[index]._id}
+                  _id={this.state.words[index]._id}
+                  word={this.state.words[index].word}
+                  definition={this.state.words[index].definition}
+                  editWord={this.editWord.bind(this)}
+                  deleteWord={this.deleteWord.bind(this)}
+                />
+              ))}
+            </div>
+          : <div className='cards' style={Styles.cardsFlex}>
+              {this.state.words.map((word) => (
+                <Card
+                  key={word._id}
+                  _id={word._id}
+                  word={word.word}
+                  definition={word.definition}
+                  editWord={this.editWord.bind(this)}
+                  deleteWord={this.deleteWord.bind(this)}
+                />
+              ))}
+            </div>
+        }
       </div>
     )
   }

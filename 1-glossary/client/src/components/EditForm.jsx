@@ -25,6 +25,8 @@ class EditForm extends React.Component {
   editWord() {
     const updatedWord = {
       _id: this.props._id,
+      word: this.state.word,
+      definition: this.state.definition
     }
     this.props.editWord(updatedWord);
     this.props.closeEditForm();
@@ -35,11 +37,11 @@ class EditForm extends React.Component {
       <div className='edit-forn' style={Styles.form}>
         <div className='field'>
           <label htmlFor="word">Word: </label>
-          <input type="text" name='word' value={this.state.word} onChange={this.onWordChange.bind(this)} />
+          <input style={Styles.input} type="text" name='word' value={this.state.word} onChange={this.onWordChange.bind(this)} />
         </div>
         <div className='field'>
           <label htmlFor="definition">Definition: </label>
-          <input type="text" name='definiton' value={this.state.definition} onChange={this.onDefinitionChange.bind(this)} />
+          <input style={Styles.input} type="text" name='definiton' value={this.state.definition} onChange={this.onDefinitionChange.bind(this)} />
         </div>
         <div style={Styles.buttonsFlex}>
           <button style={Styles.primaryButton} onClick={this.editWord.bind(this)}> Save </button>

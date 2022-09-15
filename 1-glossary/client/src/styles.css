@@ -59,9 +59,3 @@ main {
   margin: auto;
 }
 
-.new-word-form {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 10px;
-}
